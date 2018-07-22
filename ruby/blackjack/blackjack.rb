@@ -51,6 +51,98 @@ class Hand
   end
 end
 
+deck = Deck.new
+player = Hand.new
+dealer = Hand.new
+
+player_stands = false
+puts "Welcome to Blackjack"
+
+player.cards.push(deck.deal_card)
+player.cards.push(deck.deal_card)
+
+dealer.cards.push(deck.deal_card)
+dealer.cards.push(deck.deal_card)
+
+puts "Dealer's hand:"
+puts "[#{dealer.cards[0].name} of #{dealer.cards[0].suit}]"
+puts "[#{dealer.cards[1].name} of #{dealer.cards[1].suit}]"
+
+player_score = 0
+
+until player_stands
+  #Display the current hands for both the player and the dealer
+  puts "Your current hand:"
+  
+  i = 0
+  player_score = 0
+  while i < player.cards.length
+    puts "[#{player.cards[i].name} of #{player.cards[i].suit}]"
+    player_score += player.cards[i].value
+    i += 1
+  end
+
+  puts ""
+  #if the player busts on hit
+  if player_score > 21
+    player_stands = true
+  else
+    #Ask if the player wants to hit or stand
+    puts "Do you want to Hit (H) or Stand (S)?"
+    option = gets.chop
+    
+    if option == "H" || option == "h"
+      player.cards.push(deck.deal_card)
+    else
+      player_stands = true
+    end
+  end
+end
+
+#The Dealer now plays
+dealer_score = 0
+dealer_stands = false
+until dealer_stands
+  
+  i = 0
+  dealer_score = 0
+  while i < dealer.cards.length
+    dealer_score += dealer.cards[i].value
+    i += 1
+  end
+
+  if dealer_score < 17
+    dealer.cards.push(deck.deal_card)
+  else
+    dealer_stands = true
+  end
+end
+
+#Display the dealer's cards
+puts "Dealer's hand:"
+
+i = 0
+while i < dealer.cards.length
+  puts "[#{dealer.cards[i].name} of #{dealer.cards[i].suit}]"
+  i += 1
+end
+
+puts ""
+#Check the score
+if player.cards[0].name == "ace" && player.cards[1].value == 10
+  puts "Player Blackjacks"
+elsif player_score > 21
+  puts "Player Busts"
+elsif dealer_score > 21
+  puts "Dealer Busts"
+elsif player_score > dealer_score && dealer_score >= 17
+  puts "Player Wins"
+elsif player_score < dealer_score && dealer_score >= 17
+  puts "Dealer Wins"
+end
+
+puts "Thank you for playing!"
+
 require 'test/unit'
 
 class CardTest < Test::Unit::TestCase

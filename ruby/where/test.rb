@@ -11,7 +11,7 @@ class WhereTest < Minitest::Test
   end
 
   def test_where_with_exact_match
-    assert_equal [@wolf], @fixtures.where(:name => 'The Wolf'),
+    assert_equal [@wolf], @fixtures.where(:name => 'The Wolf')
   end
 
   def test_where_with_partial_match
@@ -31,3 +31,36 @@ class WhereTest < Minitest::Test
   end
 end
 
+class Array
+  def where (hash)
+    #Get the keys and the values from the hash
+    keys = hash.keys
+    values = hash.values
+
+    i = 0
+    newArray = [] #Create a new array to hold any matching hashes
+    while i < self.length
+      #Keep track of the conditions that return true
+      true_val = 0
+      
+      #Loop through the current hash to see if the conditions match
+      k = 0
+      while k < hash.length
+
+        if values[k] === self[i][keys[k]]
+          true_val += 1
+        end
+        
+        k += 1
+      end
+
+      #If all the conditions are true, add the hash to the new array
+      if true_val == hash.length
+        newArray.push(self[i])
+      end
+
+      i += 1
+    end
+    newArray
+  end
+end

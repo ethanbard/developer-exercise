@@ -46,7 +46,7 @@ class QuoteTable extends Component {
         );
 
         //Slice the tableRows array to simulate separate pages
-        var firstQuote = this.props.currentPage * 15; //Display 15 results per page
+        var firstQuote = currentPage * 15; //Display 15 results per page
         var lastQuote = firstQuote + 15;
 
         return (

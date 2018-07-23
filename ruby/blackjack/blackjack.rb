@@ -50,98 +50,146 @@ class Hand
     @cards = []
   end
 end
+#******************************************
+#************MY BLACKJACK CLASS************
+#******************************************
+class Blackjack
+  def initialize
+    @deck = Deck.new
+    @player = Hand.new
+    @dealer = Hand.new
 
-deck = Deck.new
-player = Hand.new
-dealer = Hand.new
-
-player_stands = false
-puts "Welcome to Blackjack"
-
-player.cards.push(deck.deal_card)
-player.cards.push(deck.deal_card)
-
-dealer.cards.push(deck.deal_card)
-dealer.cards.push(deck.deal_card)
-
-puts "Dealer's hand:"
-puts "[#{dealer.cards[0].name} of #{dealer.cards[0].suit}]"
-puts "[#{dealer.cards[1].name} of #{dealer.cards[1].suit}]"
-
-player_score = 0
-
-until player_stands
-  #Display the current hands for both the player and the dealer
-  puts "Your current hand:"
-  
-  i = 0
-  player_score = 0
-  while i < player.cards.length
-    puts "[#{player.cards[i].name} of #{player.cards[i].suit}]"
-    player_score += player.cards[i].value
-    i += 1
+    @player_score = 0
+    @dealer_score = 0
   end
 
-  puts ""
-  #if the player busts on hit
-  if player_score > 21
-    player_stands = true
-  else
-    #Ask if the player wants to hit or stand
-    puts "Do you want to Hit (H) or Stand (S)?"
-    option = gets.chop
+  def display_player_hand
+    #Display the current hand for player
+    puts "Your current hand:"
     
-    if option == "H" || option == "h"
-      player.cards.push(deck.deal_card)
-    else
-      player_stands = true
+    i = 0
+    while i < @player.cards.length
+      puts "[#{@player.cards[i].name} of #{@player.cards[i].suit}]"
+      i += 1
     end
   end
-end
 
-#The Dealer now plays
-dealer_score = 0
-dealer_stands = false
-until dealer_stands
-  
-  i = 0
-  dealer_score = 0
-  while i < dealer.cards.length
-    dealer_score += dealer.cards[i].value
-    i += 1
+  def display_dealer_hand
+    #Display the dealer's cards
+    puts "Dealer's hand:"
+
+    i = 0
+    while i < @dealer.cards.length
+      puts "[#{@dealer.cards[i].name} of #{@dealer.cards[i].suit}]"
+      i += 1
+    end
   end
 
-  if dealer_score < 17
-    dealer.cards.push(deck.deal_card)
-  else
-    dealer_stands = true
+  def deal_cards
+    #The player gets two cards and the dealer gets one
+    @player.cards.push(@deck.deal_card)
+    @player.cards.push(@deck.deal_card)
+
+    @dealer.cards.push(@deck.deal_card)
+  end
+
+  def player_score
+    i = 0
+    score = 0
+    while i < @player.cards.length
+      score += @player.cards[i].value
+      i += 1
+    end
+    score
+  end
+
+  def dealer_score
+    i = 0
+    score = 0
+    while i < @dealer.cards.length
+      score += @dealer.cards[i].value
+      i += 1
+    end
+    score
+  end
+
+  def start_game
+    player_stands = false
+    deal_cards
+
+    puts "Welcome to Blackjack"
+    puts ""
+    
+    display_dealer_hand
+    puts ""
+    #The player gets blackjack if dealt an ace and a 10-point-card
+    if (@player.cards[0].name == :ace && @player.cards[1].value == 10) || (@player.cards[0].value == 10 && @player.cards[1].name == :ace)
+      puts "Player Blackjacks"
+    else
+      until player_stands
+        #Display the current hand for player
+        display_player_hand
+        puts ""
+
+        #If the player busts on hit
+        if player_score > 21
+          player_stands = true
+        else
+          #Ask if the player wants to hit or stand
+          puts "Do you want to Hit (H) or Stand (S)?"
+          option = gets.chop
+        
+          if option == "H" || option == "h"
+            @player.cards.push(@deck.deal_card)
+          else
+            player_stands = true
+          end
+        end
+      end
+    end
+    
+    #The Dealer now plays
+    dealer_stands = false
+    until dealer_stands
+      if dealer_score < 17
+        @dealer.cards.push(@deck.deal_card)
+      else
+        dealer_stands = true
+      end
+    end
+    
+    #Display the dealer's cards
+    display_dealer_hand
+    puts ""
+
+    check_score
+  end
+
+  def check_score
+    #Calculate the scores
+    @player_score = player_score
+    @dealer_score = dealer_score
+
+    #Check the score
+    if (@dealer.cards[0].name == :ace && @dealer.cards[1].value == 10) || (@dealer.cards[0].value == 10 && @dealer.cards[1].name == :ace)
+      puts "Dealer Blackjacks"
+    elsif player_score > 21
+      puts "Player Busts"
+    elsif dealer_score > 21
+      puts "Dealer Busts"
+    elsif player_score > dealer_score && dealer_score >= 17
+      puts "Player Wins"
+    elsif player_score < dealer_score && dealer_score >= 17
+      puts "Dealer Wins"
+    end
+
+    puts "Thank you for playing!"
   end
 end
 
-#Display the dealer's cards
-puts "Dealer's hand:"
-
-i = 0
-while i < dealer.cards.length
-  puts "[#{dealer.cards[i].name} of #{dealer.cards[i].suit}]"
-  i += 1
-end
-
-puts ""
-#Check the score
-if player.cards[0].name == "ace" && player.cards[1].value == 10
-  puts "Player Blackjacks"
-elsif player_score > 21
-  puts "Player Busts"
-elsif dealer_score > 21
-  puts "Dealer Busts"
-elsif player_score > dealer_score && dealer_score >= 17
-  puts "Player Wins"
-elsif player_score < dealer_score && dealer_score >= 17
-  puts "Dealer Wins"
-end
-
-puts "Thank you for playing!"
+#Create a new instance of the Blackjack class and start the game
+new_game = Blackjack.new
+new_game.start_game
 
 require 'test/unit'
 

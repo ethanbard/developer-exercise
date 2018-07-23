@@ -27,6 +27,30 @@
   to { transform: rotate(360deg); }
 }
 
-table, th, td {
+table {
+  table-layout: fixed;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+table td, table th {
   border: 2px solid blue;
+  padding: 5px;
+}
+
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: blue;
+  color: white;
+}
+
+table td {
+  text-align: left;
+}
+
+table td:first-child {
+  width: 70%;
 }

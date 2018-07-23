@@ -47,6 +47,7 @@ class QuoteTable extends Component {
 
         return (
             <div>
+            {pageButtons}
             <table>
                 <tr>
                 <th>Quote</th>
@@ -56,7 +57,6 @@ class QuoteTable extends Component {
                 </tr>
                 {tableRows.slice(firstQuote, lastQuote)}
             </table>
-            {pageButtons}
             </div>
         );
     }

@@ -13,7 +13,7 @@ class QuoteTable extends Component {
         let filteredQuotes = [];
 
         for (var i in quotes) {
-            if (quotes[i].quote.includes(currentFilter)) {
+            if (quotes[i].quote.toLowerCase().includes(currentFilter.toLowerCase())) {
 
                 //Check if the quote has the correct theme
                 if (quotes[i].theme === currentTheme || currentTheme === "all") {

@@ -3,22 +3,26 @@ import React, { Component } from 'react';
 
 class QuoteTable extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-            currentPage: 0
-        };
-        this.handlePageChange = this.handlePageChange.bind(this);
-    }
-
-    handlePageChange(event) {
-        this.setState({currentPage: Number(event.target.id)});
-    }
-
     render() {
         const quotes = this.props.quotes;
+        const currentFilter = this.props.currentFilter;
+        const currentTheme = this.props.currentTheme;
+        const currentPage = this.props.currentPage;
+
+        //Filter the quotes
+        let filteredQuotes = [];
+
+        for (var i in quotes) {
+            if (quotes[i].quote.includes(currentFilter)) {
+
+                //Check if the quote has the correct theme
+                if (quotes[i].theme === currentTheme || currentTheme === "all") {
+                    filteredQuotes.push(quotes[i]);
+                }
+            }
+        }
         
-        let tableRows = quotes.map((quote, index) =>
+        let tableRows = filteredQuotes.map((quote, index) =>
             <tr key={index}>
                 <td>{quote.quote}</td> 
                 <td>{quote.source}</td>
@@ -38,11 +42,11 @@ class QuoteTable extends Component {
         
         //Then, create buttons for each page
         let pageButtons = pages.map(index =>
-            <button key={index} id={index} onClick={this.handlePageChange}>{index + 1}</button>
+            <button key={index} id={index} onClick={() => this.props.onPageChange(index)}>{index + 1}</button>
         );
 
         //Slice the tableRows array to simulate separate pages
-        var firstQuote = this.state.currentPage * 15; //Display 15 results per page
+        var firstQuote = this.props.currentPage * 15; //Display 15 results per page
         var lastQuote = firstQuote + 15;
 
         return (

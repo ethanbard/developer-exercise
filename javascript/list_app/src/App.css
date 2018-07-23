@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 }
 
 .App-logo {
@@ -29,7 +30,6 @@
 
 table {
   table-layout: fixed;
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   margin-left: 5%;
   margin-right: 5%;
@@ -53,4 +53,21 @@ table td {
 
 table td:first-child {
   width: 70%;
+}
+
+button {
+  background-color: blue;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px;
+  color: white;
+}
+
+button:hover {
+  background-color: deepskyblue;
+}
+
+.disabled {
+  background-color: deepskyblue;
 }
